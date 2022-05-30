@@ -1422,7 +1422,9 @@ PK_Verifier* X509Certificate::GetPK_VerifierObject(const OID &algorithm, const X
     }
     else if (algorithm == ASN1::Ed25519())
     {
-        verifier.reset(new ed25519::Verifier(key));
+        ByteQueue queue;
+        key.Save(queue);
+        verifier.reset(new ed25519::Verifier(queue));
     }
     // PKIX uses OID 1.3.6.1.4.1.11591.15.1 and calls it curve25519.
     // See https://datatracker.ietf.org/doc/html/draft-josefsson-pkix-newcurves
@@ -1432,7 +1434,9 @@ PK_Verifier* X509Certificate::GetPK_VerifierObject(const OID &algorithm, const X
     // https://datatracker.ietf.org/doc/html/draft-ietf-openpgp-rfc4880bis
     else if (algorithm == OID(1)+3+6+1+4+1+11591+15+1)
     {
-        verifier.reset(new ed25519::Verifier(key));
+        ByteQueue queue;
+        key.Save(queue);
+        verifier.reset(new ed25519::Verifier(queue));
     }
     else
     {
